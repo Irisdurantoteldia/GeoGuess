@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Button } from 'react-native';
 
 
-export default function Page1({ route, navigation }) {
+export default function PgPreguntes({ route, navigation }) {
     const { userName } = route.params;
 
  return (

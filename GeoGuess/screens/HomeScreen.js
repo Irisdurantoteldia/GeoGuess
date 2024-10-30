@@ -1,35 +1,90 @@
-import React, { useState } from 'react';
-import { View, Text, Button, TextInput } from 'react-native';
+import React from 'react';
+import { View, Text, Image, ImageBackground, TouchableOpacity, StyleSheet } from 'react-native';
 
 export default function HomeScreen({ navigation }) {
-  const [userName, setUserName] = useState('');
-
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home Screen</Text>
-      <Text>User:</Text>
-      <TextInput
-        style={{
-          height: 40,
-          borderColor: 'gray',
-          borderWidth: 1,
-          width: 200,
-          marginVertical: 10,
-          paddingHorizontal: 10,
-        }}
-        placeholder="Escriu el teu nom"
-        value={userName}
-        onChangeText={text => setUserName(text)}
-      />
+    <ImageBackground source={require('../assets/images/geoguess.jpg')} style={styles.backgroundImage}>
+      {/* Contingut superposat a la imatge */}
+      <View style={styles.overlay}>
+        
+        {/* Títol "GEO GUESS" amb logo a la "O" */}
+        <View style={styles.titleContainer}>
+          <Text style={styles.titleText}>GE</Text>
+          <Image source={require('../assets/logo.png')} style={styles.logoImage} />
+          <Text style={styles.titleText}> GUESS</Text>
+        </View>
 
-      <Button
-        title="Go to Page1"
-        onPress={() => navigation.navigate('Page1', { userName })}
-      />
-      <Button
-       title="Go to Page2"
-       onPress={() => navigation.navigate('Page2')}
-     />
-    </View>
+        {/* Botó de "Let's start!" */}
+        <TouchableOpacity 
+          style={styles.startButton} 
+          onPress={() => navigation.navigate('GameScreen')}>
+          <Text style={styles.startButtonText}>Let's start!</Text>
+        </TouchableOpacity>
+        
+        {/* Icona d'informació */}
+        <TouchableOpacity 
+          style={styles.infoButton} 
+          onPress={() => navigation.navigate('InfoScreen')}>
+          <Text style={styles.infoText}>i</Text>
+        </TouchableOpacity>
+
+      </View>
+    </ImageBackground>
   );
 }
+
+const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover', // La imatge ocupa tota la pantalla
+    width: '100%',
+    height: '100%',
+  },
+  overlay: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Lleuger fons blanc transparent per fer que el text sigui més llegible
+  },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 30,
+  },
+  titleText: {
+    fontSize: 36,
+    fontWeight: 'bold',
+    color: '#2e7d32',
+  },
+  logoImage: {
+    width: 36,
+    height: 36,
+  },
+  startButton: {
+    backgroundColor: '#4caf50',
+    paddingVertical: 10,
+    paddingHorizontal: 40,
+    borderRadius: 20,
+    marginBottom: 20,
+  },
+  startButtonText: {
+    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  infoButton: {
+    position: 'absolute',
+    bottom: 20,
+    right: 20,
+    backgroundColor: '#e0e0e0',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  infoText: {
+    fontSize: 24,
+    color: '#555555',
+  },
+});

@@ -14,7 +14,7 @@ const locations = [
   { id: 8, latitude: 37.7922, longitude: 139.0918, title: "Aso Farm Land", description: "Un bon lloc per a l'exhibició de vehicles i activitats de drift." },
 ];
 
-export default function Page2({ navigation }) {
+export default function Informacio({ navigation }) {
   
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
