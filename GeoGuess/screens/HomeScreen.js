@@ -4,29 +4,32 @@ import { View, Text, Image, ImageBackground, TouchableOpacity, StyleSheet } from
 export default function HomeScreen({ navigation }) {
   return (
     <ImageBackground source={require('../assets/images/geoguess.jpg')} style={styles.backgroundImage}>
-      {/* Contingut superposat a la imatge */}
-      <View style={styles.overlay}>
-        
-        {/* Títol "GEO GUESS" amb logo a la "O" */}
+      <View style={styles.container}>
+
+        {/* Título "GEO" en la parte superior con el icono más grande */}
         <View style={styles.titleContainer}>
           <Text style={styles.titleText}>GE</Text>
           <Image source={require('../assets/logo.png')} style={styles.logoImage} />
-          <Text style={styles.titleText}> GUESS</Text>
         </View>
 
-        {/* Botó de "Let's start!" */}
-        <TouchableOpacity 
-          style={styles.startButton} 
-          onPress={() => navigation.navigate('GameScreen')}>
-          <Text style={styles.startButtonText}>Let's start!</Text>
-        </TouchableOpacity>
-        
-        {/* Icona d'informació */}
-        <TouchableOpacity 
-          style={styles.infoButton} 
-          onPress={() => navigation.navigate('InfoScreen')}>
-          <Text style={styles.infoText}>i</Text>
-        </TouchableOpacity>
+        {/* Texto "GUESS" en una línea separada */}
+        <Text style={styles.subtitleText}>GUESS</Text>
+
+        {/* Botón de "Let's start!" */}
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity 
+            style={styles.startButton} 
+            onPress={() => navigation.navigate('PgPreguntes')}>
+            <Text style={styles.startButtonText}>Let's start!</Text>
+          </TouchableOpacity>
+
+          {/* Botón de información al lado del botón de inicio */}
+          <TouchableOpacity 
+            style={styles.infoButton} 
+            onPress={() => navigation.navigate('Informacio')}>
+            <Text style={styles.infoText}>i</Text>
+          </TouchableOpacity>
+        </View>
 
       </View>
     </ImageBackground>
@@ -36,47 +39,59 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   backgroundImage: {
     flex: 1,
-    resizeMode: 'cover', // La imatge ocupa tota la pantalla
+    resizeMode: 'cover',
     width: '100%',
     height: '100%',
   },
-  overlay: {
+  container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.7)', // Lleuger fons blanc transparent per fer que el text sigui més llegible
+    justifyContent: 'flex-start', // Colocar el contenido más arriba
+    paddingTop: 100, // Ajusta este valor para subir el contenido
   },
   titleContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 30,
+    marginBottom: 5, // Espacio pequeño entre "GEO" y "GUESS"
   },
   titleText: {
-    fontSize: 36,
+    fontSize: 70,
     fontWeight: 'bold',
     color: '#2e7d32',
+    fontFamily: 'Georgia', // Usa una fuente serif para darle un toque más elegante
   },
   logoImage: {
-    width: 36,
-    height: 36,
+    width: 90, // Icono más grande
+    height: 60,
+    marginLeft: 0,
+  },
+  subtitleText: {
+    fontSize: 70,
+    fontWeight: 'bold',
+    color: '#2e7d32',
+    fontFamily: 'Georgia', // Fuente serif para que coincida con el estilo del título
+    marginBottom: 30, 
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: 10, 
   },
   startButton: {
     backgroundColor: '#4caf50',
     paddingVertical: 10,
-    paddingHorizontal: 40,
+    paddingHorizontal: 30,
     borderRadius: 20,
-    marginBottom: 20,
+    marginRight: 30,
   },
   startButtonText: {
     color: '#ffffff',
     fontSize: 20,
     fontWeight: 'bold',
+    fontFamily: 'Verdana',
   },
   infoButton: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#4caf50', 
     width: 40,
     height: 40,
     borderRadius: 20,
@@ -85,6 +100,6 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 24,
-    color: '#555555',
+    color: '#ffffff',
   },
 });

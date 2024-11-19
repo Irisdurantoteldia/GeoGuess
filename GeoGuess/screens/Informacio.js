@@ -1,75 +1,114 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
-import MapView, { Marker, Callout } from 'react-native-maps';
-
-// Conjunt de localitzacions de drift al Japó (latitud, longitud, descripció)
-const locations = [
-  { id: 1, latitude: 35.6062, longitude: 139.4044, title: "Daikoku Futo", description: "Un dels llocs més populars per fer drift a Yokohama." },
-  { id: 2, latitude: 35.7051, longitude: 139.8125, title: "Tama River", description: "Zona coneguda per les curses de carrer a Tòquio." },
-  { id: 3, latitude: 34.6959, longitude: 135.5104, title: "Meihan Sportsland", description: "Un circuit conegut a Nara per competicions de drift." },
-  { id: 4, latitude: 34.4697, longitude: 135.7947, title: "Kansai Circuit", description: "Un circuit molt popular entre els aficionats al drift a Osaka." },
-  { id: 5, latitude: 35.3342, longitude: 138.6939, title: "Fuji Speedway", description: "Un circuit emblemàtic que acull esdeveniments de motors." },
-  { id: 6, latitude: 35.4101, longitude: 138.2492, title: "Hakone Turnpike", description: "Una carretera muntanyenca popular per a les curses de drift." },
-  { id: 7, latitude: 35.3606, longitude: 138.7274, title: "Izu Skyline", description: "Una carretera escènica ideal per fer drift i gaudir de les vistes." },
-  { id: 8, latitude: 37.7922, longitude: 139.0918, title: "Aso Farm Land", description: "Un bon lloc per a l'exhibició de vehicles i activitats de drift." },
-];
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 export default function Informacio({ navigation }) {
-  
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text style={styles.title}>Localitzacions Drift Japó</Text>
+    return (
+        <View style={styles.container}>
+            {/* Header ajustat més avall */}
+            <View style={styles.header}>
+                <Text style={styles.headerText}>Informació:</Text>
+            </View>
 
-      <MapView
-        style={styles.map}
-        initialRegion={{
-          latitude: 35.6812, // Coordenades inicials (Exemple: Tòquio)
-          longitude: 139.7671,
-          latitudeDelta: 5, // Ampliem el delta per mostrar més àrea
-          longitudeDelta: 5,
-        }}
-      >
-        {/* Mostra els marcadors per a cada localització de drift */}
-        {locations.map(location => (
-          <Marker
-            key={location.id}
-            coordinate={{ latitude: location.latitude, longitude: location.longitude }}
-            title={location.title}
-          >
-            <Callout>
-              <View style={styles.callout}>
-                <Text style={styles.calloutTitle}>{location.title}</Text>
-                <Text>{location.description}</Text>
-              </View>
-            </Callout>
-          </Marker>
-        ))}
-      </MapView>
+            {/* Contingut principal */}
+            <View style={styles.content}>
+                <Text style={styles.title}>Rangs i puntuació</Text>
+                <ScrollView contentContainerStyle={styles.tableContainer}>
+                    {[
+                        { range: '+2000km', score: '0/10' },
+                        { range: '1501-2000km', score: '1/10' },
+                        { range: '1001-1500km', score: '2/10' },
+                        { range: '801-1000km', score: '3/10' },
+                        { range: '601-800km', score: '4/10' },
+                        { range: '401-600km', score: '5/10' },
+                        { range: '201-400km', score: '6/10' },
+                        { range: '101-200km', score: '7/10' },
+                        { range: '51-100km', score: '8/10' },
+                        { range: '11-50km', score: '9/10' },
+                        { range: '0-10km', score: '10/10' },
+                    ].map((item, index) => (
+                        <View key={index} style={styles.row}>
+                            <Text style={styles.cell}>{item.range}</Text>
+                            <Text style={styles.cell}>{item.score}</Text>
+                        </View>
+                    ))}
+                </ScrollView>
+            </View>
 
-      {/* Botó per tornar enrere */}
-      <Button
-        title="Torna enrere"
-        onPress={() => navigation.goBack()}
-      />
-    </View>
-  );
+            {/* Botó Go Back ajustat més amunt */}
+            <TouchableOpacity
+                style={styles.goBackButton}
+                onPress={() => navigation.goBack()}
+            >
+                <Text style={styles.goBackText}>Go Back</Text>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
-// Estils per al component
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginVertical: 10,
-  },
-  map: {
-    width: '100%',
-    height: '70%', 
-  },
-  callout: {
-    width: 150, // Amplada del callout
-  },
-  calloutTitle: {
-    fontWeight: 'bold',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#4caf50', // Fons verd
+        padding: 20,
+        paddingBottom: 50,
+    },
+    header: {
+        alignItems: 'center',
+        marginBottom: 20, // Ajusta la separació inferior
+    },
+    headerText: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: 'white',
+        backgroundColor: '#4caf50', // Fons semitransparent
+        paddingTop: 60,
+        borderRadius: 10,
+    },
+    content: {
+        backgroundColor: '#81c774', // Fons lleugerament diferenciat
+        borderRadius: 10,
+        padding: 15,
+        marginTop: 20, // Més avall del títol
+        flex: 1, // Ocupa l'espai disponible
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: 'white',
+        marginBottom: 15,
+        textAlign: 'center',
+    },
+    tableContainer: {
+        width: '100%',
+    },
+    row: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 5,
+        padding: 5,
+        backgroundColor: 'white',
+        borderRadius: 5,
+    },
+    cell: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: 'black',
+        width: '45%',
+        textAlign: 'center',
+    },
+    goBackButton: {
+        backgroundColor: '#ffffff',
+        paddingVertical: 10,
+        paddingHorizontal: 20,
+        borderRadius: 20,
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: '60%',
+        marginVertical: 20, // Ajustat més amunt
+    },
+    goBackText: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#4caf50', // Text verd
+    },
 });
