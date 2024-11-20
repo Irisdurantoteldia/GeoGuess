@@ -70,7 +70,7 @@ const PgPreguntes = () => {
             } else {
                 // Un cop es van passar totes les preguntes, navega a la pantalla de puntuació
                 const distances = questionsList.map((question) => question.distance || 0);
-                navigation.navigate('ScoreScreen', { distances });
+                navigation.navigate('Puntuacio', { distances });
             }
         } else {
             Alert.alert('Atenció!', 'Si us plau, selecciona la teva resposta al mapa abans de continuar.');
@@ -78,8 +78,11 @@ const PgPreguntes = () => {
     };
 
     const finishQuiz = () => {
-        navigation.navigate('Puntuacio', { distances: questionsList.map((q, index) => q.distance || 0) });
-
+        // Afegir la distància de la última pregunta abans d'acabar
+        if (distance) {
+            questionsList[currentQuestionIndex].distance = distance;
+        }
+        navigation.navigate('Puntuacio', { distances: questionsList.map((q) => q.distance || 0) });
     };
 
     useEffect(() => {
@@ -98,19 +101,28 @@ const PgPreguntes = () => {
 
     return (
         <View style={styles.container}>
-            {/* Requadre verd per la pregunta */}
+            {/* Indicador de pregunta (número de la pregunta i total) */}
+            <View style={styles.questionNumberContainer}>
+                <Text style={styles.questionNumber}>
+                    {`Pregunta ${currentQuestionIndex + 1} de ${questionsList.length}`}
+                </Text>
+            </View>
+
+            {/* Títol de la pregunta */}
             <View style={styles.questionContainer}>
-                <Text style={styles.question}>{currentQuestion?.Title}</Text>
+                <Text style={styles.question}>
+                    {currentQuestion?.Title}
+                </Text>
             </View>
 
             {/* Mapa a la part central */}
             <MapView
                 style={styles.map}
                 initialRegion={{
-                    latitude: currentQuestion?.Geopoint?.latitude || 37.7749,
-                    longitude: currentQuestion?.Geopoint?.longitude || -122.4194,
-                    latitudeDelta: 0.0922,
-                    longitudeDelta: 0.0421,
+                    latitude: 40.4637, // Centre aproximat d'Espanya
+                    longitude: -3.7492, // Centre aproximat d'Espanya
+                    latitudeDelta: 8.5, // Ajusta aquest valor per a l'ampliació vertical
+                    longitudeDelta: 8.5, // Ajusta aquest valor per a l'ampliació horitzontal
                 }}
                 onPress={(e) => {
                     if (!isChecked) {
@@ -121,6 +133,7 @@ const PgPreguntes = () => {
                 showsCompass={false}
                 showsUserLocation={false}
             >
+                {/* Aquí van els markers i polyline */}
                 {isChecked && currentQuestion?.Geopoint && (
                     <Marker
                         coordinate={currentQuestion?.Geopoint}
@@ -146,6 +159,7 @@ const PgPreguntes = () => {
                 )}
             </MapView>
 
+
             {isChecked && distance && (
                 <Text style={styles.distanceText}>
                     Distància entre punts: {distance.toFixed(2)} Km.
@@ -155,6 +169,7 @@ const PgPreguntes = () => {
             <View style={styles.bottomContainer}>
                 {currentQuestionIndex < questionsList.length - 1 ? (
                     <>
+                        {/* Botons per a preguntes anteriors a l'última */}
                         <TouchableOpacity style={styles.checkButton} onPress={handleCheck}>
                             <Text style={styles.checkButtonText}>Check</Text>
                         </TouchableOpacity>
@@ -163,9 +178,21 @@ const PgPreguntes = () => {
                         </TouchableOpacity>
                     </>
                 ) : (
-                    <TouchableOpacity style={styles.checkButton} onPress={finishQuiz}>
-                        <Text style={styles.checkButtonText}>Next</Text>
-                    </TouchableOpacity>
+                    <>
+                        {/* Botó Check per a l'última pregunta */}
+                        {!isChecked && (
+                            <TouchableOpacity style={styles.checkButton} onPress={handleCheck}>
+                                <Text style={styles.checkButtonText}>Check</Text>
+                            </TouchableOpacity>
+                        )}
+
+                        {/* Botó Next només si s'ha fet Check */}
+                        {isChecked && (
+                            <TouchableOpacity style={styles.checkButton} onPress={finishQuiz}>
+                                <Text style={styles.checkButtonText}>Next</Text>
+                            </TouchableOpacity>
+                        )}
+                    </>
                 )}
             </View>
         </View>
@@ -179,6 +206,22 @@ const styles = StyleSheet.create({
         paddingTop: 40, // Augmenta la separació superior
         paddingBottom: 40,
         paddingHorizontal: 10,
+    },
+    questionNumberContainer: {
+        position: 'absolute',
+        top: 20,
+        right: 20,
+        backgroundColor: '#4caf50',
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderRadius: 20,
+        zIndex: 10, // Perquè estigui per sobre del mapa i altres components
+    },
+    questionNumber: {
+        fontSize: 14,
+        fontWeight: 'bold',
+        color: '#fff',
+        paddingTop: 10,
     },
     questionContainer: {
         width: '100%', // Ocupa tot l'ample

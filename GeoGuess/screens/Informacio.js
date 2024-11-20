@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 
 export default function Informacio({ navigation }) {
     return (
@@ -12,8 +12,15 @@ export default function Informacio({ navigation }) {
             {/* Contingut principal */}
             <View style={styles.content}>
                 <Text style={styles.title}>Rangs i puntuació</Text>
+
+                {/* Contenidor amb subtítol i imatge al costat */}
+                <View style={styles.subtitleContainer}>
+                    <Text style={styles.subtitle}>Rangs i puntuacions:</Text>
+                    <Image source={require('../assets/logo.png')} style={styles.logoImage} />
+                </View>
+
                 <ScrollView contentContainerStyle={styles.tableContainer}>
-                    {[
+                    {[ 
                         { range: '+2000km', score: '0/10' },
                         { range: '1501-2000km', score: '1/10' },
                         { range: '1001-1500km', score: '2/10' },
@@ -27,8 +34,19 @@ export default function Informacio({ navigation }) {
                         { range: '0-10km', score: '10/10' },
                     ].map((item, index) => (
                         <View key={index} style={styles.row}>
-                            <Text style={styles.cell}>{item.range}</Text>
-                            <Text style={styles.cell}>{item.score}</Text>
+                            {/* Range */}
+                            <View style={styles.cellContainer}>
+                                <Text style={styles.cell}>{item.range}</Text>
+                                {/* Línia sota el Range */}
+                                <View style={styles.separator} />
+                            </View>
+
+                            {/* Score */}
+                            <View style={styles.cellContainer}>
+                                <Text style={styles.cell}>{item.score}</Text>
+                                {/* Línia sota el Score */}
+                                <View style={styles.separator} />
+                            </View>
                         </View>
                     ))}
                 </ScrollView>
@@ -65,11 +83,13 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     content: {
-        backgroundColor: '#81c774', // Fons lleugerament diferenciat
+        backgroundColor: '#ffffff', // Fons lleugerament diferenciat
         borderRadius: 10,
         padding: 15,
         marginTop: 20, // Més avall del títol
         flex: 1, // Ocupa l'espai disponible
+        width: '90%', // Fa el container més estret
+        alignSelf: 'center', // Centra el container
     },
     title: {
         fontSize: 20,
@@ -78,23 +98,47 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         textAlign: 'center',
     },
+    subtitleContainer: {
+        flexDirection: 'row', // Col·loca el subtítol i la imatge en una fila
+        alignItems: 'center', // Centra verticalment el subtítol i la imatge
+        marginBottom: 15, // Redueix la separació entre el subtítol i la taula
+        marginTop: -40, // Ajusta la posició del subtítol
+    },
+    subtitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'black',
+        marginRight: 10,
+        fontFamily: 'Arial Rounded MT Bold',
+    },
+    logoImage: {
+        width: 90, // Icono més gran
+        height: 60,
+    },
     tableContainer: {
         width: '100%',
     },
     row: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginBottom: 5,
-        padding: 5,
-        backgroundColor: 'white',
-        borderRadius: 5,
+        marginBottom: 10, // Augmenta el marge entre les files
+    },
+    cellContainer: {
+        flex: 1, // Asegura que les cel·les tinguin el mateix ample
+        alignItems: 'center', // Centrat de les cel·les
     },
     cell: {
         fontSize: 16,
         fontWeight: 'bold',
         color: 'black',
-        width: '45%',
         textAlign: 'center',
+        fontFamily: 'Arial Rounded MT Bold',
+    },
+    separator: {
+        height: 1,                  // Alçada de la línia
+        backgroundColor: 'black',   // Color negre
+        marginVertical: 5,          // Espai entre la cel·la i la línia
+        width: '100%',               // La línia ocupa tota l'amplada de la cel·la
     },
     goBackButton: {
         backgroundColor: '#ffffff',

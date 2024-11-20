@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, FlatList } from 'react-native';
+import { Text, View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import { TouchableOpacity } from 'react-native';
 
 const Puntuacio = () => {
     const route = useRoute();
@@ -45,25 +44,38 @@ const Puntuacio = () => {
 
     return (
         <View style={styles.container}>
+            {/* Títol */}
             <Text style={styles.title}>Resultat Final</Text>
 
-            {/* Llista de puntuacions */}
-            <FlatList
-                data={distances.map((distance, index) => ({
-                    key: index.toString(),
-                    distance,
-                    score: calculateScore(distance),
-                }))}
-                renderItem={({ item }) => (
-                    <View style={styles.item}>
-                        <Text style={styles.text}>Distància: {item.distance.toFixed(2)} km</Text>
-                        <Text style={styles.text}>Puntuació: {item.score}/10</Text>
-                    </View>
-                )}
-            />
+            {/* Contenidor de resultats */}
+            <View style={styles.resultContainer}>
+                {/* Llista de puntuacions */}
+                <FlatList
+                    data={distances.map((distance, index) => ({
+                        key: index.toString(),
+                        index: index + 1, // Índex amb numeració començant des de 1
+                        distance,
+                        score: calculateScore(distance),
+                    }))}
+                    renderItem={({ item }) => (
+                        <View style={styles.item}>
+                            <View style={styles.indexContainer}>
+                                <Text style={styles.indexText}>{item.index}</Text>
+                            </View>
+                            <View style={styles.detailsContainer}>
+                                <Text style={styles.text}>Distància: {item.distance.toFixed(2)} km</Text>
+                                <Text style={styles.text}>Puntuació: {item.score}/10</Text>
+                            </View>
+                        </View>
+                    )}
+                />
 
-            {/* Puntuació mitjana */}
-            <Text style={styles.averageText}>Puntuació Mitjana: {averageScore}/10</Text>
+                {/* Línia separadora */}
+                <View style={styles.separator} />
+
+                {/* Puntuació mitjana */}
+                <Text style={styles.averageText}>Total: {averageScore}/10</Text>
+            </View>
 
             {/* Botó per tornar a l'inici */}
             <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Home')}>
@@ -76,51 +88,86 @@ const Puntuacio = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#4caf50',
+        backgroundColor: '#4caf50', // Fons verd per tota la pantalla
+        justifyContent: 'center', // Centrar tot el contingut
         alignItems: 'center',
-        justifyContent: 'center',
         padding: 20,
     },
     title: {
         fontSize: 28,
         fontWeight: 'bold',
         color: 'white',
-        paddingTop: 40,
-        marginBottom: 20,
+        marginBottom: 40,
+    },
+    resultContainer: {
+        backgroundColor: '#ffffff', // Fons blanc per a la taula de resultats
+        borderRadius: 10,
+        padding: 30,  // Augmentem el padding per fer més gran el contenidor
+        width: '90%', // Ample de la taula
+        maxHeight: 500, // Limitar l'altura màxima (més gran)
     },
     item: {
         backgroundColor: '#81c774',
         padding: 15,
-        paddingHorizontal: 50,
+        marginVertical: 10,
         borderRadius: 10,
-        marginVertical: 8,
-        width: '100%',  // Fes que els quadres siguin més amples ajustant el percentatge
     },
     text: {
         fontSize: 16,
         color: 'white',
+        fontFamily: 'Arial Rounded MT Bold',
+    },
+    separator: {
+        height: 1,
+        backgroundColor: '#cccccc',
+        marginVertical: 15,
     },
     averageText: {
         fontSize: 22,
         fontWeight: 'bold',
-        color: 'yellow',
-        padding: 20,
-        marginVertical: 30,
-        marginBottom: 10,
+        color: '#fbc02d', // Color groc per la puntuació mitjana
+        textAlign: 'center',
     },
     button: {
-        backgroundColor: '#81c774',
-        paddingVertical: 12,
+        backgroundColor: '#ffffff',
+        paddingVertical: 15,
         paddingHorizontal: 20,
-        borderRadius: 25,
-        marginTop: 20,
-        padding: 10,
+        borderRadius: 20,
+        alignItems: 'center',
+        alignSelf: 'center',
+        width: '60%',
+        marginVertical: 30, // Ajustat més amunt
     },
     buttonText: {
-        color: 'white',
-        fontSize: 18,
+        fontSize: 16,
         fontWeight: 'bold',
+        color: '#4caf50', // Text verd
     },
+    item: {
+        backgroundColor: '#81c774',
+        flexDirection: 'row', // Per alinear el número amb els detalls
+        padding: 15,
+        marginVertical: 10,
+        borderRadius: 10,
+    },
+    indexContainer: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#4caf50', // Color de fons per al número
+        width: 30, // Ample fix per a la numeració
+        height: 30, // Altura fixada
+        borderRadius: 15, // Forma circular
+        marginRight: 10, // Espai entre el número i els detalls
+    },
+    indexText: {
+        color: '#ffffff',
+        fontWeight: 'bold',
+        fontSize: 14,
+    },
+    detailsContainer: {
+        flex: 1, // Ajusta l'espai restant per al text
+    },
+
 });
 
 export default Puntuacio;
